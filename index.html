@@ -9,30 +9,23 @@
         ref,
       } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
       const App = {
-        data() {
-          return {
-            loading: false,
-            products: [],
-          };
-        },
-        computed: {
-          numberOfProducts() {
-            return this.products.length;
-          },
-        },
-        methods: {
-          async fetchProducts() {
+        setup() {
+          const loading = ref(true);
+          const products = ref([]);
+
+          const numberOfProducts = computed(() => products.value.length);
+
+          async function fetchProducts() {
             const res = await fetch(
               "https://dummyjson.com/products?limit=10000"
             );
             const data = await res.json();
-            this.products = data.products;
-          },
-        },
-        async created() {
-          this.loading = true;
-          await this.fetchProducts();
-          this.loading = false;
+            products.value = data.products;
+          }
+          fetchProducts().then(() => {
+            loading.value = false;
+          });
+          return { loading, products, numberOfProducts, fetchProducts };
         },
         template: `
             <div v-if="loading">loading...</div>
