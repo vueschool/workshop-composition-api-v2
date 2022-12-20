@@ -1,18 +1,15 @@
 <script setup>
 import { ref, computed } from "vue";
 import ProductCard from "./components/ProductCard.vue";
+import { useFetch } from "./composables/useFetch";
 
 // loading products
-const loading = ref(true);
-const products = ref([]);
 const numberOfProducts = computed(() => products.value.length);
-async function fetchProducts() {
-  const res = await fetch("https://dummyjson.com/products?limit=10000");
-  const data = await res.json();
-  products.value = data.products;
-  loading.value = false;
-}
-fetchProducts();
+
+const { data, loading } = useFetch(
+  "https://dummyjson.com/products?limit=10000"
+);
+const products = computed(() => data.value.products || []);
 
 // ordering products
 const orderBy = ref("price");
