@@ -4,16 +4,20 @@ import ProductCard from "./components/ProductCard.vue";
 import { useFetch } from "./composables/useFetch";
 import { useSort } from "./composables/useSort";
 import { refDebounced } from "@vueuse/core";
+import { useEscapeKey } from "./composables/useEscKey";
 
 // loading products
 const query = ref("");
+useEscapeKey(() => {
+  query.value = "";
+});
 const queryDebounced = refDebounced(query, 200);
 const url = computed(
   () =>
     `https://dummyjson.com/products/search?limit=10000&q=${queryDebounced.value}`
 );
 const { data, loading } = useFetch(url);
-const products = computed(() => data.value.products || []);
+const products = computed(() => data.value?.products || []);
 
 // products meta
 const numberOfProducts = computed(() => products.value.length);
