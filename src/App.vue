@@ -2,10 +2,9 @@
 import { ref, computed } from "vue";
 import ProductCard from "./components/ProductCard.vue";
 import { useFetch } from "./composables/useFetch";
+import { useSort } from "./composables/useSort";
 
 // loading products
-const numberOfProducts = computed(() => products.value.length);
-
 const query = ref("");
 const url = computed(
   () => `https://dummyjson.com/products/search?limit=10000&q=${query.value}`
@@ -13,17 +12,13 @@ const url = computed(
 const { data, loading } = useFetch(url);
 const products = computed(() => data.value.products || []);
 
+// products meta
+const numberOfProducts = computed(() => products.value.length);
+
 // ordering products
 const orderBy = ref("price");
 const desc = ref(false);
-const orderedProducts = computed(() => {
-  const cloned = JSON.parse(JSON.stringify(products.value));
-  return cloned.sort((a, b) => {
-    return desc.value
-      ? b[orderBy.value] - a[orderBy.value]
-      : a[orderBy.value] - b[orderBy.value];
-  });
-});
+const { sorted: orderedProducts } = useSort(products, orderBy, desc);
 </script>
 
 <template>
