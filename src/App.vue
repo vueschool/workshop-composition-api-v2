@@ -6,9 +6,11 @@ import { useFetch } from "./composables/useFetch";
 // loading products
 const numberOfProducts = computed(() => products.value.length);
 
-const { data, loading } = useFetch(
-  "https://dummyjson.com/products?limit=10000"
+const query = ref("");
+const url = computed(
+  () => `https://dummyjson.com/products/search?limit=10000&q=${query.value}`
 );
+const { data, loading } = useFetch(url);
 const products = computed(() => data.value.products || []);
 
 // ordering products
@@ -25,22 +27,31 @@ const orderedProducts = computed(() => {
 </script>
 
 <template>
-  <div v-if="loading">loading...</div>
-  <div v-else>
+  <div>
     <h1 class="text-2xl mb-5">Products ({{ numberOfProducts }})</h1>
     <label class="w-1/3"
       >Order by
-      <select class="border-2 border-gray-300 rounded w-1/3" v-model="orderBy">
+      <select
+        class="border-2 border-gray-300 rounded w-1/3 p-2"
+        v-model="orderBy"
+      >
         <option value="price">Price</option>
         <option value="rating">Rating</option>
       </select>
+      <input
+        type="text"
+        class="border-2 border-gray-300 rounded ml-2 p-2"
+        placeholder="Search"
+        v-model="query"
+      />
       <label class="pl-3 w-1/3">
         <input type="checkbox" v-model="desc" />
         Descending
       </label>
     </label>
 
-    <ul class="flex gap-4 flex-wrap flex-grow justify-center">
+    <div v-if="loading">loading...</div>
+    <ul v-else class="flex gap-4 flex-wrap flex-grow justify-center">
       <ProductCard
         v-for="product in orderedProducts"
         :key="product.id"
