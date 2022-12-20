@@ -11,9 +11,7 @@ export default {
     v-for="i in 5"
     :key="i"
     aria-hidden="true"
-    :class="`w-5 h-5 ${
-      rating >= i + 1 ? 'text-yellow-300' : 'text-transparent'
-    }`"
+    :class="`w-5 h-5 ${rating >= i ? 'text-yellow-300' : 'text-transparent'}`"
     stroke=" #646464"
     stroke-width="1px"
     fill="currentColor"

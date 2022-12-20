@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
 import ProductCard from "./components/ProductCard.vue";
+
+// loading products
 const loading = ref(true);
 const products = ref([]);
 const numberOfProducts = computed(() => products.value.length);
@@ -8,9 +10,20 @@ async function fetchProducts() {
   const res = await fetch("https://dummyjson.com/products?limit=10000");
   const data = await res.json();
   products.value = data.products;
-}
-fetchProducts().then(() => {
   loading.value = false;
+}
+fetchProducts();
+
+// ordering products
+const orderBy = ref("price");
+const desc = ref(false);
+const orderedProducts = computed(() => {
+  const cloned = JSON.parse(JSON.stringify(products.value));
+  return cloned.sort((a, b) => {
+    return desc.value
+      ? b[orderBy.value] - a[orderBy.value]
+      : a[orderBy.value] - b[orderBy.value];
+  });
 });
 </script>
 
@@ -18,9 +31,21 @@ fetchProducts().then(() => {
   <div v-if="loading">loading...</div>
   <div v-else>
     <h1 class="text-2xl mb-5">Products ({{ numberOfProducts }})</h1>
+    <label class="w-1/3"
+      >Order by
+      <select class="border-2 border-gray-300 rounded w-1/3" v-model="orderBy">
+        <option value="price">Price</option>
+        <option value="rating">Rating</option>
+      </select>
+      <label class="pl-3 w-1/3">
+        <input type="checkbox" v-model="desc" />
+        Descending
+      </label>
+    </label>
+
     <ul class="flex gap-4 flex-wrap flex-grow justify-center">
       <ProductCard
-        v-for="product in products"
+        v-for="product in orderedProducts"
         :key="product.id"
         :product="product"
         class="w-80"
