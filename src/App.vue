@@ -7,13 +7,13 @@ import { refDebounced } from "@vueuse/core";
 
 // loading products
 const query = ref("");
-const queryDebounced = refDebounced(query, 200);
+const queryDebounced = refDebounced(query, 400);
 const url = computed(
   () =>
     `https://dummyjson.com/products/search?limit=10000&q=${queryDebounced.value}`
 );
 const { data, loading } = useFetch(url);
-const products = computed(() => data.value.products || []);
+const products = computed(() => data.value?.products || []);
 
 // products meta
 const numberOfProducts = computed(() => products.value.length);
