@@ -9,7 +9,7 @@ const numberOfProducts = computed(() => products.value.length);
 const { data, loading } = useFetch(
   "https://dummyjson.com/products?limit=10000"
 );
-const products = computed(() => data.value.products || []);
+const products = computed(() => data.value?.products || []);
 
 // ordering products
 const orderBy = ref("price");
