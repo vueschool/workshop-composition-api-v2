@@ -1,4 +1,5 @@
 <script setup>
+import VideoPlayer from "./components/VideoPlayer.vue";
 import { ref, computed } from "vue";
 import ProductCard from "./components/ProductCard.vue";
 import { useFetch } from "./composables/useFetch";
@@ -30,6 +31,7 @@ const { sorted: orderedProducts } = useSort(products, orderBy, desc);
 
 <template>
   <div>
+    <VideoPlayer src="/dog-beach.mp4" class="w-96 mb-10" />
     <h1 class="text-2xl mb-5">Products ({{ numberOfProducts }})</h1>
     <label class="w-1/3"
       >Order by
