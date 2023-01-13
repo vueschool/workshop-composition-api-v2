@@ -1,4 +1,4 @@
-import { ref, isRef, watch, computed, reactive, toRefs } from "vue";
+import { isRef, watch, computed, reactive, toRefs } from "vue";
 export const useFetch = (url) => {
   // handle a reactive ref or a string
   const URL = computed(() => {
