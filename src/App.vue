@@ -11,7 +11,7 @@ const query = ref("");
 useEscapeKey(() => {
   query.value = "";
 });
-const queryDebounced = refDebounced(query, 200);
+const queryDebounced = refDebounced(query, 400);
 const url = computed(
   () =>
     `https://dummyjson.com/products/search?limit=10000&q=${queryDebounced.value}`
