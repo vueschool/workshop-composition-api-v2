@@ -10,7 +10,7 @@ const url = computed(
   () => `https://dummyjson.com/products/search?limit=10000&q=${query.value}`
 );
 const { data, loading } = useFetch(url);
-const products = computed(() => data.value.products || []);
+const products = computed(() => data.value?.products || []);
 
 // products meta
 const numberOfProducts = computed(() => products.value.length);
