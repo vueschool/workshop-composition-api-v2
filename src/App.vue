@@ -23,8 +23,8 @@ export default {
 <template>
   <div v-if="loading">loading...</div>
   <div v-else>
-    <h1 class="text-2xl mb-5">Products ({{ numberOfProducts }})</h1>
-    <ul class="flex gap-4 flex-wrap flex-grow justify-center">
+    <h1 class="mb-5 text-2xl">Products ({{ numberOfProducts }})</h1>
+    <ul class="flex flex-wrap justify-center flex-grow gap-4">
       <ProductCard
         v-for="product in products"
         :key="product.id"
